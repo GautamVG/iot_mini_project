@@ -1,9 +1,12 @@
 <script lang='ts'>
 	import { onMount } from "svelte";
-    import type { ApexOptions } from 'apexcharts';
-    import chart from "$lib/chart";
+    import { fade } from "svelte/transition";
+    import { Shadow } from "svelte-loading-spinners";
 
-    let data = "";
+    import ParkingSpot from "./parking_spot.svelte";
+
+    let spots: Array<Spot> = [];
+    let parking_fee = "7 Rs."; // per minute
 
     onMount(() => {
         let timer = setInterval(update, 1000);
@@ -12,30 +15,31 @@
 
     async function update() {
         const res = await fetch("/api/spots/list");
-        data = JSON.stringify(await res.json());
+        spots = await res.json();
     }
-
-    let options: ApexOptions = {
-        chart: {
-            type: "bar",
-        },
-        series: [
-            {
-                name: "sales",
-                data: [30, 10, 35, 50, 49, 60, 70, 91, 125],
-            },
-        ],
-        xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-        },
-    };
 
 </script>
 
-{#if data == ""}
-    <h1>Loading</h1>
-{:else}
-    <h1>{data}</h1>
-{/if}
+{#if spots.length == 0}
 
-<div use:chart={options} />
+    <!-- Loader -->
+    <div class="w-screen h-screen flex justify-center items-center">
+        <Shadow size={48} />
+    </div>
+
+{:else}
+
+    <!-- Outer Container -->
+    <div class="flex flex-col gap-8 items-center mx-auto my-16" transition:fade>
+        <h1 class="text-3xl">Current parking layout</h1>
+        <h2 class="text-xl">Parking fees: {parking_fee} / minute</h2>
+
+        <div class="grid grid-cols-3 gap-16">
+            {#each spots as spot}
+                <ParkingSpot {spot} />
+            {/each}
+        </div>
+
+    </div>
+
+{/if}
