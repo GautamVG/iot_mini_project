@@ -1,5 +1,5 @@
 from threading import Thread;
-from math import floor;
+from math import floor, ceil;
 from datetime import datetime;
 from flask import Flask, abort, request, send_from_directory;
 from lib import db;
@@ -92,7 +92,7 @@ def event_loop():
                 start_time = ticket["start_time"];
                 parking_fee = ticket["parking_fee"];
                 end_time = datetime.now();
-                time_parked = ((end_time - start_time).total_seconds() / 60);
+                time_parked = ceil((end_time - start_time).total_seconds() / 60);
                 amount = time_parked * parking_fee;
 
                 db.query("update `spots` set `occupied` = false where `name` = ?;", [parking_spot_name]);

@@ -1,41 +1,96 @@
 <script lang='ts'>
-	import { onMount } from "svelte";
-    import type { ApexOptions } from 'apexcharts';
-    import chart from "$lib/chart";
 
-    let data = "";
+	import { onMount } from "svelte";
+    import { fade } from "svelte/transition";
+    import { Shadow } from "svelte-loading-spinners";
+
+	import ParkingSpots from "./parking_spots.svelte";
+	import Stats from "./stats.svelte";
+	import ParkingTimeHistogram from "./parking_time_histogram.svelte";
+
+    let count = 0;
+    $: ready = count >= 3;
+
+    let parking_fee = 7;
+    let spots: Array<Spot> = [];
+    let tickets: Array<ParkingTicket> = [];
+    let receipts: Array<ParkingReceipt> = [];
 
     onMount(() => {
         let timer = setInterval(update, 1000);
         return () => clearInterval(timer);
     });
 
-    async function update() {
-        const res = await fetch("/api/spots/list");
-        data = JSON.stringify(await res.json());
+    function update() {
+        updateSpots();
+        updateTickets();
+        updateReceipts();
     }
 
-    let options: ApexOptions = {
-        chart: {
-            type: "bar",
-        },
-        series: [
-            {
-                name: "sales",
-                data: [30, 10, 35, 50, 49, 60, 70, 91, 125],
-            },
-        ],
-        xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-        },
-    };
+    async function updateSpots() {
+        console.log("hi");
+        const res = await fetch("/api/spots/list");
+        spots = await res.json();
+        count++;
+    }
+
+    async function updateTickets() {
+        console.log("hiaa");
+        const res = await fetch("/api/tickets/list");
+        tickets = await res.json();
+        count++;
+    }
+
+    async function updateReceipts() {
+        console.log("hiee");
+        const res = await fetch("/api/receipts/list");
+        receipts = await res.json();
+        count++;
+    }
+
 
 </script>
 
-{#if data == ""}
-    <h1>Loading</h1>
+{#if !ready}
+
+    <!-- Loader -->
+    <div class="w-screen h-screen flex justify-center items-center">
+        <Shadow size={48} />
+    </div>
+
 {:else}
-    <h1>{data}</h1>
+
+    <!-- Outer Container -->
+    <div class="flex flex-col gap-8 items-center mx-auto my-16 w-1/2" transition:fade>
+
+        <h1 class="text-3xl">Current parking fees: {parking_fee} rs. / minute</h1>
+
+        <section>
+            <Stats {receipts} />
+        </section>
+
+        <section>
+            <h1 class="section-title">Parking spots</h1>
+            <ParkingSpots {spots} {tickets} />
+        </section>
+
+        <section>
+            <h1 class="section-title">Parking times</h1>
+            <ParkingTimeHistogram {receipts} />
+        </section>
+
+    </div>
+
 {/if}
 
-<div use:chart={options} />
+<style lang='postcss'>
+
+    section {
+        @apply w-full my-8;
+    }
+
+    .section-title {
+        @apply text-3xl mb-8;
+    }
+
+</style>
