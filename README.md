@@ -9,20 +9,18 @@ Team members:
 
 ## Front-end
 
-The following end-points are defined
-
--   `/`: The home page showing available parking slots, parking fee, a button to open the `/checkin` page and a button to open the `/checkout` page.
--   `/checkin`: Claim any free parking spot and assign a 4-digit code to that spot. Display the parking spot and the code to user.
--   `/checkout`: Prompt the user for a 4-digit code. Get the parking spot assigned to the code, calculate its fee, display the fee and ask for payment. After payment, free up the spot.
--   `/admin`: Serve the admin dashboard
+-   `/`: The home page showing available parking slots and parking fee. This is for use of the customers
+-   `/admin`: The admin dashboard. Shows all parking slots, with parking tickets. Shows a list of parking receipts, graphs, visualizations, etc.
 
 ## Back-end
 
 -   `/api`:
     -   `/spots`:
         -   `/list`: Returns a list of `Spot` objects
-    -   `/checkin`: If spot free, returns a `ParkingTicket` object, otherwise throws an http error
-    -   `/checkout?code=PARKING_CODE`: If code valid, returns a `ParkingReceipt` object, otherwise throws an http error
+    -   `/tickets`:
+        -   `/list`: Returns a list of `ParkingTicket` objects
+    -   `/receipts`:
+        -   `/list`: Returns a list of `ParkingReceipt` objects
 
 ```
 interface Spot {
