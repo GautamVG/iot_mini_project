@@ -13,7 +13,7 @@
     });
 
     async function update() {
-        const res = await fetch("/api/receipts/list_payable");
+        let res = await fetch("/api/receipts/list_payable");
         receipts = await res.json();
         ready = true;
     }

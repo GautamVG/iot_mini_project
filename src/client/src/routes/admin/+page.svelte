@@ -11,15 +11,21 @@
     let count = 0;
     $: ready = count >= 3;
 
-    let parking_fee = 7;
+    let config: Config | null;
     let spots: Array<Spot> = [];
     let tickets: Array<ParkingTicket> = [];
     let receipts: Array<ParkingReceipt> = [];
 
     onMount(() => {
+        init();
         let timer = setInterval(update, 1000);
         return () => clearInterval(timer);
     });
+
+    async function init() {
+        const res = await fetch("/api/config");
+        config = await res.json();
+    }
 
     function update() {
         updateSpots();
@@ -63,7 +69,7 @@
     <!-- Outer Container -->
     <div class="flex flex-col gap-8 items-center mx-auto my-16 w-1/2" transition:fade>
 
-        <h1 class="text-3xl">Current parking fees: {parking_fee} rs. / minute</h1>
+        <h1 class="text-3xl">Current parking fees: {config?.parking_fee} rs. / minute</h1>
 
         <section>
             <Stats {receipts} />

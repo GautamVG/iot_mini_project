@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="rounded-lg p-8 flex flex-col items-center justify-center w-full relative overflow-hidden" >
+<div class="rounded-lg px-4 py-12 flex flex-col items-center justify-center w-full relative overflow-hidden" >
 
     <!-- Layer beneath the text content -->
     <div 

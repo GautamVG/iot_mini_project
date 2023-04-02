@@ -1,3 +1,7 @@
+interface Config {
+	parking_fee: number;
+}
+
 interface Spot {
 	name: string;
 	occupied: boolean;

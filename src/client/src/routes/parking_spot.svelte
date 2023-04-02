@@ -6,7 +6,7 @@
 
 </script>
 
-<div class="rounded-lg p-8 flex flex-col items-center justify-center w-40 relative overflow-hidden" >
+<div class="rounded-lg px-8 py-16 flex flex-col items-center justify-center w-full relative overflow-hidden" >
 
     <!-- Layer beneath the text content -->
     <div 
@@ -17,11 +17,11 @@
     ></div>
     
     <!-- Text content -->
-    <p class="text-md text-primary-content">{spot.name}</p>
+    <p class="text-lg font-bold">{spot.name}</p>
     {#if spot.occupied}
-        <p class="text-sm text-secondary-content" in:fade>OCCUPIED</p>
+        <p class="text-sm" in:fade>OCCUPIED</p>
     {:else}
-        <p class="text-sm text-secondary-content" in:fade>FREE</p>
+        <p class="text-sm" in:fade>FREE</p>
     {/if}
 
 </div>
