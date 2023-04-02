@@ -1,6 +1,5 @@
 from threading import Thread;
 from math import floor;
-from random import randint;
 from datetime import datetime;
 from flask import Flask, abort, request, send_from_directory;
 from lib import db;
@@ -19,6 +18,10 @@ db.run_script("schema.sql");
 @app.route('/')
 def index():
     return send_from_directory('client/build', 'index.html');
+
+@app.route('/checkout')
+def checkout():
+    return send_from_directory('client/build', 'checkout.html');
 
 @app.route('/admin')
 def admin():
