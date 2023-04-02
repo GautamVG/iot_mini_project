@@ -9,7 +9,7 @@ def detect_parking():
     # one list contains spots which just had a vehicle enter
     # other list contains spots which just had a vehicle leave
 
-    delay = 1000;
+    delay = 10000;
     spots = db.query("select * from `spots`;");
     empty_spots = [spot for spot in spots if spot["occupied"] == 0];
     occupied_spots = [spot for spot in spots if spot["occupied"] == 1];

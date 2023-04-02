@@ -1,7 +1,8 @@
 from threading import Thread;
+from math import floor;
 from random import randint;
 from datetime import datetime;
-from flask import Flask, request, send_from_directory;
+from flask import Flask, abort, request, send_from_directory;
 from lib import db;
 from lib import parking_detector;
 
@@ -23,6 +24,11 @@ def index():
 def admin():
     return send_from_directory('client/build', 'admin.html');
 
+@app.route('/api/config')
+def get_config():
+    res = db.query("select * from `config`");
+    return res[0];
+
 @app.route('/api/spots/list')
 def spots_list():
     return db.query("select * from `spots`;");
@@ -34,6 +40,22 @@ def tickets_list():
 @app.route('/api/receipts/list')
 def receipts_list():
     return db.query("select * from `receipts`;");
+
+@app.route('/api/receipts/list_payable')
+def receipts_list_payable():
+    return db.query("select * from `receipts` where `payed` = false");
+
+@app.route('/api/receipts/pay')
+def receipt_pay():
+    if (request.args["id"] is None):
+        abort(400, description = "Receipt ID is absent");
+
+    res = db.query("select count() as `count` from `receipts` where `id` = ?", [request.args["id"]]);
+    if (res[0]["count"] == 0):
+        abort(400, description = "Receipt ID is not valid");
+
+    db.query("update `receipts` set `payed` = true where `id` = ?", [request.args["id"]]);
+    return {};
 
 # Path for all the static files (compiled JS/CSS, etc.)
 @app.route("/<path:path>")
@@ -50,7 +72,7 @@ def event_loop():
         for spot in checked_in_spots:
             parking_spot_name = spot["name"];
             start_time = datetime.now();
-            db.query("insert into `tickets` (`parking_spot_name`, `start_time`) values (?, ?);", [parking_spot_name, start_time]);
+            db.query("insert into `tickets` (`parking_spot_name`, `start_time`, `parking_fee`) select ?, ?, `parking_fee` from `config`;", [parking_spot_name, start_time]);
             db.query("update `spots` set `occupied` = true where `name` = ?;", [parking_spot_name]);
 
         # For each checked out spot, remove a ticket and insert a receipt
@@ -65,9 +87,9 @@ def event_loop():
 
                 ticket = tickets[0];
                 start_time = ticket["start_time"];
+                parking_fee = ticket["parking_fee"];
                 end_time = datetime.now();
-                time_parked = (end_time - start_time).total_seconds();
-                parking_fee = 10;
+                time_parked = ((end_time - start_time).total_seconds() / 60);
                 amount = time_parked * parking_fee;
 
                 db.query("update `spots` set `occupied` = false where `name` = ?;", [parking_spot_name]);

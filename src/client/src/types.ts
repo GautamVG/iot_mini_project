@@ -4,14 +4,15 @@ interface Spot {
 }
 
 interface ParkingTicket {
-	code: number;
 	parking_spot_name: string;
+	parking_fee: number;
+	start_time: string;
 }
 
 interface ParkingReceipt extends ParkingTicket {
-	start_time: string; // ISO format
+	id: number;
 	end_time: string; // ISO format
 	time_parked: number; // minutes
-	parking_fee: number; // rupees per minute
 	amount: number; // rupees
+	payed: boolean;
 }
