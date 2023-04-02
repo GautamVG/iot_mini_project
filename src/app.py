@@ -1,7 +1,7 @@
 from threading import Thread;
 from random import randint;
 from datetime import datetime;
-from flask import Flask, abort, request, send_from_directory;
+from flask import Flask, request, send_from_directory;
 from lib import db;
 from lib import parking_detector;
 
@@ -12,19 +12,16 @@ app = Flask(__name__);
 
 # DB Setup
 db.run_script("schema.sql");
-# res = db.query("select * from `slots`;");
-# print("Hello")
-# print(res)
 
 # ------------------------------------------------ Routes ---------------------------------------------------------
 
 @app.route('/')
 def index():
-    return send_from_directory('client/public', 'index.html');
+    return send_from_directory('client/build', 'index.html');
 
 @app.route('/admin')
 def admin():
-    return "Hello ADmin!";
+    return send_from_directory('client/build', 'admin.html');
 
 @app.route('/api/spots/list')
 def spots_list():
@@ -41,21 +38,13 @@ def receipts_list():
 # Path for all the static files (compiled JS/CSS, etc.)
 @app.route("/<path:path>")
 def home(path):
-    return send_from_directory('client/public', path);
+    return send_from_directory('client/build', path);
 
 # ------------------------------------------------ Event loop for hardware interfacing ---------------------------------------------------------
 
 def event_loop():
     while True:
         checked_in_spots, checked_out_spots = parking_detector.detect_parking();
-        if (len(checked_in_spots)):
-            print("IN")
-            print(checked_in_spots);
-            print("\n");
-        if (len(checked_out_spots)):
-            print("OUT")
-            print(checked_out_spots);
-            print("\n");
 
         # For each checked in spot, insert a ticket into the database
         for spot in checked_in_spots:
@@ -97,8 +86,6 @@ def event_loop():
 
 # ------------------------------------------------ Starting the server -------------------------------------------------------------------------
 
-# event_loop_thread = Thread(target = event_loop, daemon = True);
-# event_loop_thread.start();
 Thread(target = event_loop, daemon = True).start();
 
 if __name__ == "__main__":
