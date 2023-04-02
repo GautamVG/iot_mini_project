@@ -7,20 +7,35 @@ Team members:
 -   Shreeraj
 -   Gautam
 
-> For deployment, clone the `prod` branch. The flask server is still required but svelte kit is not. The front-end is directly served from the flask app
+## Running locally
+
+Required: Python (with the venv module), pip, NodeJS
+
+```
+python -m venv venv
+venv\Scripts\activate
+pip install flask
+cd dist
+python app.py
+```
 
 ## Development
 
-Required: Python, pip, NodeJS
+Required: Python (with the venv module), pip, NodeJS
+
+### Initializing
 
 ```
+python -m venv venv
 venv\Scripts\activate
 pip install flask
 cd src\client
 npm i
 ```
 
-Unlike in the `prod` version, during development, the flask server is used only as a backend to host API endpoints. \
+### Running
+
+Unlike in the `dist` version, during development, the flask server is used only as a backend to host API endpoints. \
 The vite server provided by SvelteKit proxies all requests to the flask backend. \
 Start the flask server (from src folder): `python app.py` \
 Start the vite server (from client folder): `npm run dev -- --open` \
@@ -28,6 +43,7 @@ Start the vite server (from client folder): `npm run dev -- --open` \
 ## Front-end
 
 -   `/`: The home page showing available parking slots and parking fee. This is for use of the customers
+-   `/checkout`: Page showing a list of all checked-out vehicles and their receipts. Each receipt can be payed
 -   `/admin`: The admin dashboard. Shows all parking slots, with parking tickets. Shows a list of parking receipts, graphs, visualizations, etc.
 
 ## Back-end
@@ -41,21 +57,26 @@ Start the vite server (from client folder): `npm run dev -- --open` \
         -   `/list`: Returns a list of `ParkingReceipt` objects
 
 ```
+interface Config {
+	parking_fee: number;
+}
+
 interface Spot {
-    name: string,
-    occupied: boolean
+	name: string;
+	occupied: boolean;
 }
 
 interface ParkingTicket {
-    code: int,
-    parking_spot_name: string,
+	parking_spot_name: string;
+	parking_fee: number;
+	start_time: string;
 }
 
 interface ParkingReceipt extends ParkingTicket {
-    start_time:     string      // ISO format
-    end_time:       string      // ISO format
-    time_parked:    float,      // minutes
-    parking_fee:    float,      // rupees per minute
-    amount:         float,      // rupees
+	id: number;
+	end_time: string; // ISO format
+	time_parked: number; // minutes
+	amount: number; // rupees
+	payed: boolean;
 }
 ```
