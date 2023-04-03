@@ -9,7 +9,7 @@ _trig_sensors = [11, 13, 15] # GPIO.BOARD
 GPIO.setmode(GPIO.BOARD);
 for sensor in _echo_sensors:
     GPIO.setup(sensor, GPIO.IN);
-for sensor in _echo_sensors:
+for sensor in _trig_sensors:
     GPIO.setup(sensor ,GPIO.OUT);
 
 def car_present_at_sensor(i):
