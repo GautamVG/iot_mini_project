@@ -13,19 +13,22 @@ Team members:
 
 > Run on a Raspberry Pi with Raspbian or any Unix-like OS
 
-Required: Python (with the venv module), pip, NodeJS
+Required: Python (with the venv module), pip
 
 ```
 python -m venv venv
 venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.rpi.txt
 cd dist
 python app.py
 ```
 
 ## Development
 
-> While developing without a Raspberry Pi, use the `parking_detector_sim.py` package in `app.py`. This package simply simulates vehicle traffic without any physical sensor data
+> While developing without a Raspberry Pi
+>
+> -   Use the `parking_detector_sim.py` package in `app.py`. This package simply simulates vehicle traffic without any physical sensor data
+> -   Use `requirements.txt` instead of `requirements.rpi.txt` for installing python packages
 
 Required: Python (with the venv module), pip, NodeJS
 
@@ -34,7 +37,7 @@ Required: Python (with the venv module), pip, NodeJS
 ```
 python -m venv venv
 venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements.rpi.txt
 cd src\client
 npm i
 ```
