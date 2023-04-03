@@ -3,7 +3,8 @@ from math import floor, ceil;
 from datetime import datetime;
 from flask import Flask, abort, request, send_from_directory;
 from lib import db;
-from lib import parking_detector;
+from lib import parking_detector_sim as parking_detector;
+# from lib import parking_detector;
 
 # The flask application
 app = Flask(__name__);
