@@ -1,9 +1,11 @@
 from threading import Thread;
+from time import sleep;
 from math import floor, ceil;
 from datetime import datetime;
 from flask import Flask, abort, request, send_from_directory;
 from lib import db;
-from lib import parking_detector;
+from lib import parking_detector_sim as parking_detector;
+# from lib import parking_detector;
 
 # The flask application
 app = Flask(__name__);
@@ -69,6 +71,7 @@ def home(path):
 
 def event_loop():
     while True:
+        sleep(0.01);
         checked_in_spots, checked_out_spots = parking_detector.detect_parking();
 
         # For each checked in spot, insert a ticket into the database
