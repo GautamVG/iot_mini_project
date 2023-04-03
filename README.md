@@ -1,25 +1,31 @@
 # Smart Parking System using IoT
 
-Mini-project source code developed by a team of 3 for our IoT course in college
+Mini-project source code developed by a team of 3 for our IoT course in college \
+The project can be deployed on a Raspberry Pi running Raspbian or any Unix-like OS
+
 Team members:
 
--   Amaan.js
--   Shreeraj
--   Gautam
+-   Amaan Shaikh
+-   Shreeraj Rane
+-   Gautam Vishwakarma
 
 ## Running locally
+
+> Run on a Raspberry Pi with Raspbian or any Unix-like OS
 
 Required: Python (with the venv module), pip, NodeJS
 
 ```
 python -m venv venv
-venv\Scripts\activate
-pip install flask
+venv/bin/activate
+pip install -r requirements.txt
 cd dist
 python app.py
 ```
 
 ## Development
+
+> While developing without a Raspberry Pi, use the `parking_detector_sim.py` package in `app.py`. This package simply simulates vehicle traffic without any physical sensor data
 
 Required: Python (with the venv module), pip, NodeJS
 
@@ -28,7 +34,7 @@ Required: Python (with the venv module), pip, NodeJS
 ```
 python -m venv venv
 venv\Scripts\activate
-pip install flask
+pip install -r requirements.txt
 cd src\client
 npm i
 ```
@@ -47,6 +53,8 @@ Start the vite server (from client folder): `npm run dev -- --open` \
 -   `/admin`: The admin dashboard. Shows all parking slots, with parking tickets. Shows a list of parking receipts, graphs, visualizations, etc.
 
 ## Back-end
+
+> This section is out-dated and requires an update
 
 -   `/api`:
     -   `/spots`:
