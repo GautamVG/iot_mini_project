@@ -11,7 +11,7 @@
 
     onMount(() => {
         init();
-        let timer = setInterval(update, 1000);
+        let timer = setInterval(update, 10);
         return () => clearInterval(timer);
     });
 
