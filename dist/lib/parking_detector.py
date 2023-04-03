@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-import time;
 from lib import db;
 
 _sensors = [3, 5, 7] # GPIO.BOARD 
@@ -9,7 +8,7 @@ for sensor in _sensors:
     GPIO.setup(sensor, GPIO.IN);
 
 def car_present_at_sensor(i):
-    return GPIO.input(_sensors[i])
+    return GPIO.input(_sensors[i]) == 0;
 
 def detect_parking():
     # Outputs 2 lists of Spot data
